@@ -5,7 +5,7 @@ const http = require("http");
 const mongoose = require("mongoose");
 const { Server } = require("socket.io");
 
-const userRoutes = require('../chatApp-socket-backend/routes/userRoutes')
+const userRoutes = require("../chatApp-socket-backend/routes/userRoutes");
 
 require("dotenv").config();
 
@@ -29,7 +29,7 @@ mongoose.connect(dbStr, {
   useUnifiedTopology: true,
 });
 
-app.use('/users', userRoutes);
+app.use("/users", userRoutes);
 
 const database = mongoose.connection;
 database.on("error", (error) => {
