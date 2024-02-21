@@ -1,1 +1,84 @@
 /* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100% !important;
+}
+body {
+  background-color: #e5e5e5;
+}
+
+.container-fluid {
+  padding: 50px 200px;
+  overflow: hidden;
+  height: 100%;
+}
+
+.message-section{
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.chat-list{
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.chat-header{
+    position: absolute;
+    margin: 0 12px;
+    height: calc(7%) !important;
+    width: calc(100%) !important;
+    background-color: beige;
+}
+
+.message-header{
+    position: absolute;
+    margin: 0 12px;
+    height: calc(10%) !important;
+    width: calc(100%) !important;
+    background-color: lightgreen;
+}
+
+.message-footer{
+    position: absolute;
+    margin: 0 12px;
+    bottom: 0;
+    width: 100%;
+    background-color: lightseagreen;
+    height: 10% !important;
+}
+
+.text-message-input{
+    margin-top: 10px !important;
+}
+
+.message-area{
+    position: absolute;
+    margin: 0 12px;
+    margin-top: 6% !important;
+    height: 80% !important;
+    overflow-y: auto;
+    background-color: lightsteelblue;
+}
+
+.same-user{
+    display: flex;
+    justify-content: flex-end;
+
+    .message-container {
+        padding: 0 15px;
+        background-color: lightyellow;
+    }
+}
+
+.other-user{
+    display: flex;
+    justify-content: flex-start;
+
+    .rounded-end{
+        padding: 0 15px !important;
+        background-color: lightyellow !important;
+    }
+    
+}
+

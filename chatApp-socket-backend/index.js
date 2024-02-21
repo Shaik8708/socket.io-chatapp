@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const { Server } = require("socket.io");
 
 const userRoutes = require("../chatApp-socket-backend/routes/userRoutes");
+const roomRoutes = require("../chatApp-socket-backend/routes/roomRoutes");
+const messageRoutes = require("../chatApp-socket-backend/routes/messageRoutes");
 
 require("dotenv").config();
 
@@ -30,6 +32,8 @@ mongoose.connect(dbStr, {
 });
 
 app.use("/users", userRoutes);
+app.use("/rooms", roomRoutes);
+app.use("/messages", messageRoutes);
 
 const database = mongoose.connection;
 database.on("error", (error) => {

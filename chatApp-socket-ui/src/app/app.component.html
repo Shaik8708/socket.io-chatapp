@@ -1,1 +1,66 @@
-<p>working fine</p>
+<div class="container-fluid">
+  <div class="row h-100">
+    <div class="col-md-4 ">
+      <div class="chat-list  rounded border h-100">
+        <div class="row">
+          <div class="col-md-12 chat-header rounded-top">
+            <div class="fs-3 mb-3 text-center">
+              Chat List
+            </div>
+            <div  [ngClass]="user?.phone === selectedUser?.phone ? 'active' : ''" *ngFor="let user of  userList" style="cursor: pointer;" (click)="selectUserHandler(user?.phone)">
+
+              <p class="username">{{user?.name}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="message-section rounded border h-100">
+        <div class="row" *ngIf="selectedUser">
+          <div class="col-md-12 fs-1 message-header rounded-top">
+              <p class="username">{{selectedUser?.name}}</p>
+
+          </div>
+          <div class="col-md-12 message-area">
+            <div *ngFor="let item of messageArray" [ngClass]="item?.user === currentUser?.name ? 'same-user': 'other-user'">
+              <p  [ngClass]="item?.user === currentUser?.name ? 'message-container rounded-start': 'message-container rounded-end'">{{item?.message}}</p>
+
+            </div>
+          </div>
+          <div class="col-md-12 message-footer rounded-bottom">
+            <div class="row ">
+              <div class="col-md-10 text-message-input">
+
+                <input type="text" placeholder="Type your message" class="form-control rounded-pill" [(ngModel)]="messageText">
+              </div>
+              <div class="col-md-2 text-message-input">
+                <button class="btn btn-success rounded-pill" (click)="sendMessage()">send</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #popup let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Login</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <input type="number" placeholder="Enter your number" class="form-control" [(ngModel)]="phone">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-sm btn-primary" (click)="login(d)">Login</button>
+  </div>
+</ng-template>

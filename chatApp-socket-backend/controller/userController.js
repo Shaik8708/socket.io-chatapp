@@ -18,3 +18,16 @@ exports.getAllUsers = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.updateUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedData = req.body;
+    const result = await User.findOneAndUpdate({ id: id }, updatedData, {
+      useFindAndModify: false,
+    });
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
