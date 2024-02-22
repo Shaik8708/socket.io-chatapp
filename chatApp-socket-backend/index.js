@@ -56,7 +56,7 @@ io.on("connect_error", (err) => {
 
 io.on("connection", (socket) => {
   socket.on("join", (data) => {
-    console.log('a user joined', data);
+    console.log('a user joined');
     socket.join(data.room);
     io.in(data.room).emit("User Joined", data);
   });
@@ -66,7 +66,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("message", (data) => {
-    console.log(data);
     io.in(data.room).emit("new message", {
       user: data.user,
       message: data.message,
