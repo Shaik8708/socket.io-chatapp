@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Socket, io } from "socket.io-client";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +9,15 @@ import { Observable } from 'rxjs';
 export class ChatServiceService {
 
   private socket: Socket;
+  private newMessages = new Subject<[]>();
+  eventCallback$ = this.newMessages.asObservable();
   private url = "http://localhost:3000";
 
   constructor(private http: HttpClient) { 
     this.socket = io(this.url);
+    this.socket.on("new message", (data) => {
+      this.newMessages.next(data);
+    });
   }
 
   joinRoom(data: any){
@@ -20,7 +25,7 @@ export class ChatServiceService {
   }
 
   sendMessage(message: any){
-    this.socket.emit('message', message)
+    this.socket.emit('message', message);
   }
 
   getUserList(): Observable<any>{

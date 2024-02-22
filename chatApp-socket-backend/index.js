@@ -50,15 +50,29 @@ httpServer.listen(PORT, () => {
   console.log("working on port ", PORT);
 });
 
+io.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
+
 io.on("connection", (socket) => {
   socket.on("join", (data) => {
+    console.log('a user joined', data);
     socket.join(data.room);
-    socket.broadcast.to(data.room).emit("User Joined");
+    io.in(data.room).emit("User Joined", data);
   });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
   socket.on("message", (data) => {
+    console.log(data);
     io.in(data.room).emit("new message", {
       user: data.user,
       message: data.message,
+      senderId: data.senderId,
+      timestamp: data.timestamp
     });
   });
 });
+
