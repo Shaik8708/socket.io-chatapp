@@ -26,9 +26,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     private modalService: NgbModal
   ) {
     this.chatService.eventCallback$.subscribe((msg: any) => {
-      if(this.currentUser.id !== msg.senderId){
+      if (this.currentUser.id !== msg.senderId) {
         this.messageArray.push(msg);
-
       }
     });
   }
@@ -76,18 +75,22 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   getMessages() {
-    this.chatService.getMessages().subscribe((data) => {
-      this.storageArray = data;
+    this.chatService.getMessagesByRoomId(this.roomId).subscribe((data) => {
+      if (data.result.length != 0) {
+        this.storageArray = data.result;
 
-      const storeIndex = this.storageArray.findIndex(
-        (storage: any) => storage.roomId === this.roomId
-      );
-      if (storeIndex > -1) {
-        
-        this.messageArray = this.storageArray[storeIndex].chats;
+        const storeIndex = this.storageArray.findIndex(
+          (storage: any) => storage.roomId === this.roomId
+        );
+        if (storeIndex > -1) {
+          this.messageArray = this.storageArray[storeIndex].chats;
+        }
+
+        this.join(this.currentUser.name, this.roomId);
+      } else {
+        console.error('no data');
+        this.join(this.currentUser.name, this.roomId);
       }
-
-      this.join(this.currentUser.name, this.roomId);
     });
   }
 
@@ -100,34 +103,57 @@ export class AppComponent implements OnInit, AfterViewInit {
       timestamp: Math.floor(new Date().getTime()).toString(),
     });
 
-    const storeIndex = this.storageArray.findIndex(
-      (storage: any) => storage.roomId === this.roomId
-    );
-    if (storeIndex > -1) {
-      this.storageArray[storeIndex].chats.push({
-        message: this.messageText,
-        senderId: this.currentUser.id,
-        user: this.currentUser.name,
-        timestamp: Math.floor(new Date().getTime() / 1000).toString(),
-      });
-    } else {
-      const updateStorage = {
-        roomId: this.roomId,
-        chats: [
-          {
+    this.chatService.getMessagesByRoomId(this.roomId).subscribe((data: any) => {
+      if (data.result.length != 0) {
+        const storeIndex = this.storageArray.findIndex(
+          (storage: any) => storage.roomId === this.roomId
+        );
+        if (storeIndex > -1) {
+          this.storageArray[storeIndex].chats.push({
+            message: this.messageText,
             senderId: this.currentUser.id,
             user: this.currentUser.name,
-            message: this.messageText,
             timestamp: Math.floor(new Date().getTime() / 1000).toString(),
-          },
-        ],
-      };
-      this.storageArray.push(updateStorage);
-    }
+          });
+        } else {
+          const updateStorage = {
+            roomId: this.roomId,
+            chats: [
+              {
+                senderId: this.currentUser.id,
+                user: this.currentUser.name,
+                message: this.messageText,
+                timestamp: Math.floor(new Date().getTime() / 1000).toString(),
+              },
+            ],
+          };
+          this.storageArray.push(updateStorage);
+        }
 
-    this.updateMsg(this.storageArray);
+        this.updateMsg(this.storageArray);
 
-    this.messageText = '';
+        this.messageText = '';
+      } else {
+        const newMessage = {
+          chats: [
+            {
+              senderId: this.currentUser.id,
+                user: this.currentUser.name,
+                message: this.messageText,
+                timestamp: Math.floor(new Date().getTime() / 1000).toString(),
+            },
+          ],
+          roomId: this.roomId,
+        };
+        this.chatService
+          .addNewMessageRoom(newMessage)
+          .subscribe((data: any) => {
+            
+          });
+
+          this.messageText = '';
+      }
+    });
   }
 
   updateMsg(updatedData: any) {

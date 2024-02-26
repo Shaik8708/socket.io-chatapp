@@ -36,8 +36,16 @@ export class ChatServiceService {
     return this.http.get(this.url+'/messages');
   }
 
-  updateMessages(roomid: any, updatedData: any): Observable<any>{
-    return this.http.put(this.url+"/messages/"+roomid, updatedData)
+  getMessagesByRoomId(roomId: any): Observable<any>{
+    return this.http.get(this.url+'/messages/'+roomId)
+  }
+
+  updateMessages(roomId: any, updatedData: any): Observable<any>{
+    return this.http.put(this.url+"/messages/"+roomId, updatedData)
+  }
+
+  addNewMessageRoom(newMessageData: any): Observable<any>{
+    return this.http.post(this.url+"/messages", newMessageData)
   }
 
 }

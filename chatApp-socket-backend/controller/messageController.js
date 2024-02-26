@@ -19,6 +19,19 @@ exports.getAllMessages = async (req, res) => {
   }
 };
 
+exports.getMessagesByRoom = async (req, res) => {
+  try {
+    const messages = await Message.findOne({ roomId: req.params.roomId });
+    if(messages){
+      res.status(200).json({"status": 200, "result": [messages], "message": "OK"});
+    }else {
+      res.status(200).json({"status": 200, "result": [], "message": "OK"})
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.updateMessages = async (req, res) => {
   try {
     const roomId = req.params.roomId;
